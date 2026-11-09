@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>📁 ملفات البوت</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📁%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f0ec;--panel:#fffdfb;--ink:#241a1f;--mute:#7a6b72;--line:#e1d6d0;
+  --wine:#8c2744;--wine2:#6f1d36;--onwine:#fff;--chip:#efe6e1;--over:#f6dfe6;--ok:#2f8a57;--bad:#c63b3b;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#150f14;--panel:#211920;--ink:#f3e9ec;--mute:#a6969d;--line:#352a32;
+  --wine:#c4476a;--wine2:#a73a59;--chip:#2c2229;--over:#4a2233;--ok:#5fcf95;--bad:#ff8a8a;
+}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#150f14;--panel:#211920;--ink:#f3e9ec;--mute:#a6969d;--line:#352a32;--wine:#c4476a;--wine2:#a73a59;--chip:#2c2229;--over:#4a2233;--ok:#5fcf95;--bad:#ff8a8a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;font-size:16px;line-height:1.6;
+  padding:env(safe-area-inset-top,0px) 12px calc(env(safe-area-inset-bottom,0px) + 24px)}
+main{max-width:760px;margin:0 auto;padding:14px 0}
+[hidden]{display:none!important}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+h1{font-size:1.35rem;font-weight:700;margin:0}
+.pill{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--mute);background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:3px 12px}
+.dot{width:9px;height:9px;border-radius:50%;background:#e0a458}
+.pill.on .dot{background:var(--ok)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.gate{text-align:center}
+.gate p{margin:6px 0;color:var(--mute)}
+.code{direction:ltr;font:700 2.8rem/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.35em;padding:.4em .2em .4em .55em;margin:14px 0;color:var(--wine);border:2px dashed var(--wine);border-radius:12px;user-select:all}
+.cmd{direction:ltr;display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 12px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.msg{margin-top:14px;font-weight:700}
+.msg.bad{color:var(--bad)}
+button,input,select{font:inherit;color:var(--ink)}
+button{border-radius:9px;border:1px solid var(--line);background:var(--panel);padding:7px 14px;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,.chip:focus-visible{outline:3px solid var(--wine);outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:var(--wine);border-color:var(--wine);color:var(--onwine);font-weight:700}
+input,select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 12px}
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tools input{flex:1 1 150px;width:auto}
+.dirty{font-size:.82rem;color:var(--bad);font-weight:700}
+.cat{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:background .12s}
+.cat.over{background:var(--over);border-color:var(--wine)}
+.ch{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--wine);color:var(--onwine);cursor:pointer;user-select:none}
+.cat[data-id="__un"] .ch,.cat[data-id="__hide"] .ch{background:var(--wine2);opacity:.9}
+.ch b{font-weight:700}
+.cnt{font-size:.8rem;background:rgba(255,255,255,.22);border-radius:99px;padding:0 9px}
+.sp{flex:1}
+.ch button{background:rgba(255,255,255,.16);border:0;color:var(--onwine);padding:3px 9px;border-radius:7px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;padding:10px 12px 12px}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:4px 11px;font-size:.95rem;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
+.chip.lifted{opacity:.35}
+.empty{color:var(--mute);font-size:.88rem}
+#ghost{position:fixed;z-index:50;pointer-events:none;background:var(--wine);color:var(--onwine);border-radius:9px;padding:5px 14px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.35);transform:translate(-50%,-130%)}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 16px;font-weight:500;max-width:90vw;z-index:60}
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px;width:min(92vw,420px)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog h2{margin:0 0 10px;font-size:1.1rem}
+dialog label{display:block;margin:10px 0 4px;font-size:.88rem;color:var(--mute)}
+.row{display:flex;gap:8px;margin-top:16px;justify-content:flex-start}
+.err{color:var(--bad);font-size:.88rem;min-height:1.2em;margin-top:6px}
+.desc{white-space:pre-wrap;margin:6px 0;color:var(--ink)}
+code{direction:ltr;display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+.hint{color:var(--mute);font-size:.82rem;margin-top:8px}
+@media (prefers-reduced-motion:reduce){.cat{transition:none}}
+
+main{padding-bottom:96px}
+.crumb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:2px 0 10px}
+.cr{padding:2px 9px;font-size:.85rem}.sep{color:var(--mute)}
+.flist{padding:4px 12px}
+.fr{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line)}
+.fr:last-child{border:0}
+.fr input{width:22px;height:22px;flex:none;padding:0;accent-color:var(--wine)}
+.fm{flex:1;display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}
+.fn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;unicode-bidi:plaintext}
+.fs{color:var(--mute);font-size:.8rem;direction:ltr;flex:none}
+.bar{position:fixed;left:12px;right:12px;max-width:736px;margin:0 auto;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#app[hidden]~#bar{display:none!important}
+#toast{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
+.col{flex-direction:column}.col button{padding:10px}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>📁 ملفات البوت</h1>
+    <div class="pill" id="pill"><span class="dot"></span><span id="pillT">جاري الاتصال</span></div>
+  </header>
+  <section class="card gate" id="gate">
+    <p id="gateHead">جاري تجهيز كود التحقق…</p>
+    <div class="code" id="code" aria-live="polite">······</div>
+    <p>اكتب في محادثة البوت:</p>
+    <span class="cmd" id="cmd">.ملفات 000000</span>
+    <div class="msg" id="gateMsg"></div>
+    <p class="hint">الكود صالح ١٠ دقائق ويتجدد تلقائياً. الصفحة للمالك والمطور فقط.</p>
+  </section>
+  <section id="app" hidden>
+    <div class="tools">
+      <button id="up" type="button" aria-label="مجلد أعلى">⬆️</button>
+      <input id="q" type="search" placeholder="ابحث في هذا المجلد…" autocomplete="off" aria-label="بحث">
+    </div>
+    <div class="crumb" id="crumb"></div>
+    <div class="card flist" id="list"></div>
+    <p class="hint">اضغط على اسم المجلد لفتحه، واضغط المربع لتحديده. التحديد يبقى لو تنقلت بين المجلدات.</p>
+  </section>
+  <div class="bar" id="bar">
+    <span id="sel"></span><span class="sp" style="flex:1"></span>
+    <button id="all" type="button" title="تحديد الكل">☑️</button>
+    <button id="clr" type="button" title="مسح التحديد">✖</button>
+    <button id="fetch" type="button" class="primary" disabled>📥 جلب</button>
+  </div>
+</main>
+<div id="toast" hidden></div>
+<dialog id="dlgTo">
+  <h2>📥 جلب <span id="toN"></span></h2>
+  <div class="hint">وين تبي أرسلها؟ (المجلد يُرسل ZIP)</div>
+  <div class="err" id="toWarn" hidden>⚠️ التحديد فيه ملفات جلسة الواتساب، تُرسل للخاص فقط.</div>
+  <div class="row col">
+    <button id="toD" type="button" class="primary">📩 الخاص</button>
+    <button id="toG" type="button">👥 المجموعة</button>
+    <button id="toNo" type="button">إلغاء</button>
+  </div>
+</dialog>
+<script>
+(() => {
+'use strict';
+// لازم يطابق RELAY في menu_panel.js
+const RELAYS = ['https://ntfy.sh'];
+
+const $ = id => document.getElementById(id);
+const te = new TextEncoder(), td = new TextDecoder();
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = () => Array.from(crypto.getRandomValues(new Uint8Array(10)), x => (x % 36).toString(36)).join('');
+const u8b64 = u => { let s = ''; for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(s); };
+const b64u8 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const sha = async d => new Uint8Array(await crypto.subtle.digest('SHA-256', d));
+const hex = u => Array.from(u, x => x.toString(16).padStart(2, '0')).join('');
+const aes = raw => crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
+async function enc(k, obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, te.encode(JSON.stringify(obj))));
+  const o = new Uint8Array(12 + ct.length); o.set(iv); o.set(ct, 12);
+  return u8b64(o);
+}
+async function dec(k, b) {
+  const u = b64u8(b);
+  return JSON.parse(td.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.subarray(0, 12) }, k, u.subarray(12))));
+}
+const norm = s => String(s || '').replace(/[\u064B-\u065F\u0670\u0640]/g, '').replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ').trim().toLowerCase();
+const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+// ---------- قراءة الرابط ----------
+const h = new URLSearchParams(location.hash.slice(1));
+const T = h.get('t') || '', R = h.get('r') || '', S = (h.get('s') || '').replace(/\/+$/, '');
+const fatal = m => { $('gateHead').textContent = '⚠️ ' + m; $('code').hidden = true; $('cmd').hidden = true; };
+if (!/^[a-f0-9]{32}$/.test(T) || !/^[A-Za-z0-9_-]{8,64}$/.test(R) || !RELAYS.includes(S)) {
+  fatal('الرابط غير صالح. اكتب .ملفات في البوت لتحصل على رابط جديد.');
+  return;
+}
+if (!(window.crypto && crypto.subtle)) { fatal('المتصفح لا يدعم التشفير، افتح الرابط من متصفح حديث عبر https.'); return; }
+
+let TID = '', FEED = '', tokKey = null, sessKey = null, kp = null, code = '', authTimer = 0, locked = false, PFX = '.';
+const waits = new Map();
+
+// ---------- الإرسال ----------
+async function send(obj, sess) {
+  const d = await enc(sess ? sessKey : tokKey, obj);
+  const body = JSON.stringify(sess ? { v: 1, k: TID, s: 1, d } : { v: 1, k: TID, d });
+  const r = await fetch(`${S}/${R}`, { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body });
+  if (!r.ok) throw new Error(r.status === 429 ? 'الوسيط مشغول، انتظر قليلاً ثم أعد المحاولة.' : 'تعذّر الإرسال (' + r.status + ')');
+}
+function ask(a, extra, sess, ms) {
+  const m = rnd();
+  return new Promise((res, rej) => {
+    const t = setTimeout(() => { waits.delete(m); rej(new Error('timeout')); }, ms || 15000);
+    waits.set(m, o => { clearTimeout(t); res(o); });
+    send({ a, m, ...extra }, sess).catch(e => { clearTimeout(t); waits.delete(m); rej(e); });
+  });
+}
+// الحفظ: الملفات يُرسل مقسّماً على أجزاء بنفس المعرّف، والبوت يرد مرة وحدة بعد اكتمالها
+function saveAsk(bytes) {
+  const m = rnd(), rid = rnd(), SZ = 1350, n = Math.max(1, Math.ceil(bytes.length / SZ));
+  return new Promise((res, rej) => {
+    const t = setTimeout(() => { waits.delete(m); rej(new Error('timeout')); }, 60000);
+    waits.set(m, o => { clearTimeout(t); res(o); });
+    (async () => {
+      try { for (let i = 0; i < n; i++) await send({ a: 'save', m, rid, n, i, c: u8b64(bytes.subarray(i * SZ, (i + 1) * SZ)) }, true); }
+      catch (e) { clearTimeout(t); waits.delete(m); rej(e); }
+    })();
+  });
+}
+
+// ---------- الاستقبال ----------
+const seen = new Set(), rx = new Map();
+let chain = Promise.resolve();
+function online(on) { $('pill').classList.toggle('on', on); $('pillT').textContent = on ? 'متصل' : 'جاري الاتصال'; }
+async function listen() {
+  let since = '30s';
+  for (;;) {
+    const ac = new AbortController();
+    let wd = setTimeout(() => ac.abort(), 130000);
+    try {
+      const r = await fetch(`${S}/${FEED}/json?since=${since}`, { signal: ac.signal });
+      if (!r.ok) throw new Error('relay');
+      online(true);
+      const rd = r.body.getReader(); let buf = '';
+      for (;;) {
+        const { done, value } = await rd.read();
+        if (done) break;
+        clearTimeout(wd); wd = setTimeout(() => ac.abort(), 130000);
+        buf += td.decode(value, { stream: true });
+        let i;
+        while ((i = buf.indexOf('\n')) >= 0) {
+          const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+          if (!line) continue;
+          let ev; try { ev = JSON.parse(line); } catch { continue; }
+          if (ev.time) since = String(ev.time);
+          if (ev.event === 'message') chain = chain.then(() => onMsg(ev)).catch(() => {});
+        }
+      }
+    } catch {}
+    clearTimeout(wd); online(false);
+    await sleep(3000);
+  }
+}
+async function onMsg(ev) {
+  if (ev.id) { if (seen.has(ev.id)) return; seen.add(ev.id); if (seen.size > 500) seen.delete(seen.values().next().value); }
+  let m; try { m = JSON.parse(ev.message); } catch { return; }
+  if (!m || m.v !== 1 || m.k !== TID || typeof m.d !== 'string') return;
+  let o = null;
+  if (sessKey) { try { o = await dec(sessKey, m.d); } catch {} }
+  if (!o) { try { o = await dec(tokKey, m.d); } catch { return; } }
+  await handle(o);
+}
+// قطع بيانات كبيرة من البوت: نجمّعها ثم نسلّمها لمن ينتظرها
+function onCh(o) {
+  if (typeof o.m !== 'string' || typeof o.c !== 'string' || !Number.isInteger(o.n) || !Number.isInteger(o.i) || o.n < 1 || o.n > 200 || o.i < 0 || o.i >= o.n) return;
+  let r = rx.get(o.m);
+  if (!r) { r = { n: o.n, p: new Array(o.n), g: 0 }; rx.set(o.m, r); if (rx.size > 10) rx.delete(rx.keys().next().value); }
+  if (r.n !== o.n) return;
+  if (!r.p[o.i]) { r.p[o.i] = b64u8(o.c); r.g++; }
+  if (r.g < r.n) return;
+  rx.delete(o.m);
+  const all = new Uint8Array(r.p.reduce((s, x) => s + x.length, 0));
+  let off = 0; for (const x of r.p) { all.set(x, off); off += x.length; }
+  let data = null; try { data = JSON.parse(td.decode(all)); } catch {}
+  const f = waits.get(o.m); if (f) { waits.delete(o.m); f({ ok: !!data, data }); }
+}
+async function handle(o) {
+  if (!o || typeof o.t !== 'string') return;
+  if (o.t === 'ack') { const f = waits.get(o.m); if (f) { waits.delete(o.m); f(o); } return; }
+  if (o.t === 'ch') { onCh(o); return; }
+  if (o.t === 'auth') { await onAuth(o); return; }
+  if (o.t === 'err') {
+    if (o.error === 'reauth' && sessKey) { sessKey = null; beginAuth(); return; }
+    if (o.error === 'invalid') lock(o.message || 'انتهت صلاحية الرابط، اكتب .ملفات في البوت لتحصل على رابط جديد.');
+  }
+}
+function lock(msg) {
+  locked = true; clearTimeout(authTimer);
+  $('app').hidden = true; $('gate').hidden = false; $('code').hidden = true; $('cmd').hidden = true;
+  $('gateHead').textContent = msg; $('gateMsg').textContent = '';
+}
+
+// ---------- التحقق ----------
+const gm = (t, bad) => { const e = $('gateMsg'); e.textContent = t; e.className = 'msg' + (bad ? ' bad' : ''); };
+async function beginAuth() {
+  if (locked) return;
+  clearTimeout(authTimer);
+  $('app').hidden = true; $('gate').hidden = false; $('code').hidden = false; $('cmd').hidden = false;
+  $('gateHead').textContent = 'جاري تجهيز كود التحقق…'; gm('');
+  try {
+    kp = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveBits']);
+    const pk = u8b64(new Uint8Array(await crypto.subtle.exportKey('raw', kp.publicKey)));
+    for (let i = 0; i < 5; i++) {
+      code = String(100000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 900000));
+      const a = await ask('auth', { c: code, pk });
+      if (a.ok) {
+        PFX = a.p || '.';
+        $('code').textContent = code;
+        $('cmd').textContent = PFX + 'ملفات ' + code;
+        $('gateHead').textContent = 'اكتب هذا الكود في المحادثة لتأكيد أنك المالك';
+        gm('بانتظار الكود…');
+        authTimer = setTimeout(beginAuth, 9 * 60 * 1000);
+        return;
+      }
+      if (a.error !== 'taken') { gm(a.message || 'تعذّر التسجيل، أعد تحميل الصفحة.', true); return; }
+    }
+  } catch (e) {
+    gm(e.message === 'timeout' ? 'البوت لا يرد حالياً. تأكد أنه شغّال، وسأعيد المحاولة تلقائياً.' : e.message, true);
+    authTimer = setTimeout(beginAuth, 10000);
+  }
+}
+async function onAuth(o) {
+  if (o.c !== code) return;
+  if (!o.ok) { clearTimeout(authTimer); gm('🔒 هذا الأمر مخصص للمالك فقط.', true); return; }
+  try {
+    const bot = await crypto.subtle.importKey('raw', b64u8(o.bp), { name: 'ECDH', namedCurve: 'P-256' }, false, []);
+    const shared = new Uint8Array(await crypto.subtle.deriveBits({ name: 'ECDH', public: bot }, kp.privateKey, 256));
+    const pre = te.encode('obito-mp-s:' + T);
+    const all = new Uint8Array(pre.length + shared.length); all.set(pre); all.set(shared, pre.length);
+    sessKey = await aes(await sha(all));
+    clearTimeout(authTimer);
+    G_INFO = { g: !!o.g, gn: String(o.gn || '') }; $('gate').hidden = true; $('app').hidden = false;
+    loadState().catch(e => toast('⚠️ ' + (e.message === 'timeout' ? 'البوت لم يرسل الأوامر، أعد تحميل الصفحة' : e.message), 6000));
+  } catch { gm('فشل التحقق، سيتم إنشاء كود جديد.', true); setTimeout(beginAuth, 2000); }
+}
+
+
+// ---------- الملفات ----------
+let G_INFO = { g: false, gn: '' }, cwd = '', items = [], query = '', busy = false, toastT = 0;
+const sel = new Map();
+const SENS = ['ملف_الاتصال', 'sub_sessions'];
+const isSens = p => { const x = p.split('/'); return SENS.includes(x[0]) || x.includes('creds.json') || x[x.length - 1] === '.env'; };
+const join = (a, b) => a ? a + '/' + b : b;
+const fmt = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+function toast(t, ms) { const e = $('toast'); e.textContent = t; e.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { e.hidden = true; }, ms || 2600); }
+const errT = e => e.message === 'timeout' ? 'البوت لم يرد، تأكد أنه شغّال' : e.message;
+
+async function loadState() { await go(''); }
+async function go(p) {
+  toast('جاري الفتح…', 60000);
+  try {
+    const r = await ask('ls', { p }, true, 60000);
+    if (!r.ok || !r.data || !Array.isArray(r.data.items)) throw new Error(r.message || 'تعذّر فتح المجلد');
+    cwd = r.data.p; items = r.data.items; query = ''; $('q').value = '';
+    $('toast').hidden = true; render(); scrollTo(0, 0);
+    if (r.data.n > items.length) toast('⚠️ المجلد كبير، تم عرض أول ' + items.length + ' فقط', 5000);
+  } catch (e) { toast('⚠️ ' + errT(e), 5000); }
+}
+function bar() { const n = sel.size; $('sel').textContent = n ? 'المحدد: ' + n : 'ما حددت شي'; $('fetch').disabled = !n || busy; }
+function render() {
+  const q = norm(query), box = $('list'), cr = $('crumb'), parts = cwd ? cwd.split('/') : [];
+  box.textContent = ''; cr.textContent = '';
+  const mk = (t, p) => { const b = el('button', 'cr', t); b.type = 'button'; b.onclick = () => go(p); return b; };
+  cr.append(mk('🏠 الرئيسية', ''));
+  parts.forEach((s, i) => cr.append(el('span', 'sep', '›'), mk(s, parts.slice(0, i + 1).join('/'))));
+  $('up').disabled = !cwd;
+  let n = 0;
+  for (const [name, d, size] of items) {
+    if (q && !norm(name).includes(q)) continue;
+    n++;
+    const p = join(cwd, name), row = el('div', 'fr'), cb = el('input'), main = el('div', 'fm');
+    cb.type = 'checkbox'; cb.checked = sel.has(p); cb.setAttribute('aria-label', 'تحديد ' + name);
+    cb.onchange = () => { if (cb.checked) sel.set(p, 1); else sel.delete(p); bar(); };
+    main.append(el('span', '', d ? '📁' : '📄'), el('span', 'fn', name));
+    main.onclick = d ? () => go(p) : () => { cb.checked = !cb.checked; cb.onchange(); };
+    row.append(cb, main, el('span', 'fs', d ? '' : fmt(size)));
+    box.append(row);
+  }
+  if (!n) box.append(el('p', 'empty', q ? 'لا نتائج' : 'المجلد فاضي'));
+  bar();
+}
+$('up').onclick = () => go(cwd.split('/').slice(0, -1).join('/'));
+$('q').addEventListener('input', () => { query = $('q').value; render(); });
+$('all').onclick = () => {
+  const q = norm(query);
+  for (const [name] of items) if (!q || norm(name).includes(q)) sel.set(join(cwd, name), 1);
+  render();
+};
+$('clr').onclick = () => { sel.clear(); render(); };
+
+$('fetch').onclick = () => {
+  const warn = [...sel.keys()].some(isSens);
+  $('toWarn').hidden = !warn; $('toN').textContent = '(' + sel.size + ')';
+  $('toG').disabled = !G_INFO.g || warn;
+  $('toG').textContent = G_INFO.g ? '👥 المجموعة' + (G_INFO.gn ? ': ' + G_INFO.gn : '') : '👥 المجموعة (اكتب الكود داخل مجموعة)';
+  $('dlgTo').showModal();
+};
+$('toNo').onclick = () => $('dlgTo').close();
+$('toD').onclick = () => sendTo('dm');
+$('toG').onclick = () => sendTo('group');
+async function sendTo(to) {
+  $('dlgTo').close();
+  if (busy || !sel.size) return;
+  busy = true; bar(); toast('جاري الإرسال… قد ياخذ وقت', 600000);
+  try {
+    const r = await ask('fetch', { to, paths: [...sel.keys()] }, true, 600000);
+    if (!r.ok) throw new Error(r.message || 'فشل الإرسال');
+    const f = Array.isArray(r.fail) ? r.fail : [];
+    if (r.sent) { sel.clear(); render(); }
+    toast((r.sent ? '✅ تم إرسال ' + r.sent : '⚠️ ما انرسل شي') + (f.length ? ' | تعذّر: ' + f.map(x => x[0] + ' (' + x[1] + ')').join('، ') : ''), f.length ? 10000 : 4000);
+  } catch (e) { toast('⚠️ ' + errT(e), 6000); }
+  busy = false; bar();
+}
+window.addEventListener('beforeunload', ev => { if (busy) { ev.preventDefault(); ev.returnValue = ''; } });
+
+// ---------- البداية ----------
+(async () => {
+  TID = hex(await sha(te.encode(T))).slice(0, 20);
+  FEED = `${R}-f-${TID}`;
+  tokKey = await aes(await sha(te.encode('obito-mp:' + T)));
+  listen();
+  beginAuth();
+})();
+})();
+</script>
+</body>
+</html>
